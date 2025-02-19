@@ -1,0 +1,36 @@
+{
+  "name": "services-map",
+  "version": "1.0.0",
+  "description": "Arma mapa de servicios en base a consultas a Elasticsearch",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "node ./build/server.js",
+    "start": "tsc && npm run dev"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "express",
+    "restapi",
+    "rest",
+    "api",
+    "crud"
+  ],
+  "author": "luis.hernandez",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "typescript-json-serializer": "^6.0.1"
+  }
+}
