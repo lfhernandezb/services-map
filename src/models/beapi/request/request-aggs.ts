@@ -1,20 +1,20 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
-import { BEApiService } from "./service";
+import { Service } from "./service";
 
 @JsonObject()
-export class BEApiRequestAggs {
+export class RequestAggs {
     @JsonProperty("service")
-    private service: BEApiService;
+    private service: Service;
 
     constructor() {
-        this.service = new BEApiService();
+        this.service = new Service();
     }
 
-    getService(): BEApiService {
+    getService(): Service {
         return this.service;
     }
 
-    setService(service: BEApiService): void {
+    setService(service: Service): void {
         this.service = service;
     }
 }

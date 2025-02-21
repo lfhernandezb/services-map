@@ -1,27 +1,27 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
-import { FEHostQuery } from "./query";
+import { Query } from "./query";
 import { RequestAggs } from "./request-aggs";
 
 @JsonObject()
-export class FEHostRequest {
+export class Request {
     @JsonProperty()
-    private query: FEHostQuery;
+    private query: Query;
     @JsonProperty("aggs")
     private requestAggs: RequestAggs;
     @JsonProperty()
     private size: number;
 
     constructor() {
-        this.query = new FEHostQuery();
+        this.query = new Query();
         this.requestAggs = new RequestAggs();
         this.size = 0;
     }
 
-    public getQuery(): FEHostQuery {
+    public getQuery(): Query {
         return this.query;
     }
 
-    public setQuery(query: FEHostQuery): void {
+    public setQuery(query: Query): void {
         this.query = query;
     }
 
@@ -40,5 +40,5 @@ export class FEHostRequest {
     public setSize(size: number): void {
         this.size = size;
     }
-    
+
 }

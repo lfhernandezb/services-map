@@ -2,7 +2,7 @@ import { JsonObject, JsonProperty } from "typescript-json-serializer";
 import { QueryTerms } from "./query-terms";
 
 @JsonObject()
-export class BEApiQuery {
+export class Query {
     @JsonProperty("terms")
     private queryTerms: QueryTerms;
 

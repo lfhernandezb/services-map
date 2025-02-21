@@ -2,7 +2,7 @@ import { JsonObject, JsonProperty } from "typescript-json-serializer";
 import { Method } from "./method";
 
 @JsonObject()
-export class BEApiServiceAggs {
+export class ServiceAggs {
     @JsonProperty("method")
     private method: Method;
 

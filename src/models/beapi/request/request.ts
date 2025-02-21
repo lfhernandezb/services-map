@@ -1,35 +1,35 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
-import { BEApiQuery } from "./query";
-import { BEApiRequestAggs } from "./request-aggs";
+import { Query } from "./query";
+import { RequestAggs } from "./request-aggs";
 
 @JsonObject()
-export class BEApiRequest {
+export class Request {
     @JsonProperty()
-    private query: BEApiQuery;
+    private query: Query;
     @JsonProperty()
-    private aggs: BEApiRequestAggs;
+    private aggs: RequestAggs;
     @JsonProperty()
     private size: number;
 
     constructor() {
-        this.query = new BEApiQuery();
-        this.aggs = new BEApiRequestAggs();
+        this.query = new Query();
+        this.aggs = new RequestAggs();
         this.size = 0;
     }
 
-    getQuery(): BEApiQuery {
+    getQuery(): Query {
         return this.query;
     }
 
-    setQuery(query: BEApiQuery): void {
+    setQuery(query: Query): void {
         this.query = query;
     }
 
-    getAggs(): BEApiRequestAggs {
+    getAggs(): RequestAggs {
         return this.aggs;
     }
 
-    setAggs(aggs: BEApiRequestAggs): void {
+    setAggs(aggs: RequestAggs): void {
         this.aggs = aggs;
     }
 

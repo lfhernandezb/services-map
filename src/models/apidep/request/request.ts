@@ -1,35 +1,35 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
-import { APIDepQuery } from "./query";
-import { APIDepRequestAggs } from "./request-aggs";
+import { Query } from "./query";
+import { RequestAggs } from "./request-aggs";
 
 @JsonObject()
-export class APIDepRequest {
+export class Request {
     @JsonProperty("query")
-    private query: APIDepQuery;
+    private query: Query;
     @JsonProperty("aggs")
-    private aggs: APIDepRequestAggs;
+    private aggs: RequestAggs;
     @JsonProperty("size")
     private size: number;
 
     constructor() {
-        this.query = new APIDepQuery();
-        this.aggs = new APIDepRequestAggs();
+        this.query = new Query();
+        this.aggs = new RequestAggs();
         this.size = 0;
     }
 
-    setQuery(query: APIDepQuery): void {
+    setQuery(query: Query): void {
         this.query = query;
     }
 
-    getQuery(): APIDepQuery {
+    getQuery(): Query {
         return this.query;
     }
 
-    setAggs(aggs: APIDepRequestAggs): void {
+    setAggs(aggs: RequestAggs): void {
         this.aggs = aggs;
     }
 
-    getAggs(): APIDepRequestAggs {
+    getAggs(): RequestAggs {
         return this.aggs;
     }
 

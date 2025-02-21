@@ -1,17 +1,17 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
 import { Terms } from "../../terms";
-import { APIDepServiceAggs } from "./service-aggs";
+import { ServiceAggs } from "./service-aggs";
 
 @JsonObject()
-export class APIDepService {
+export class Service {
     @JsonProperty()
     private terms: Terms;
     @JsonProperty("aggs")
-    private APIDepServiceAggs: APIDepServiceAggs;
+    private ServiceAggs: ServiceAggs;
 
     constructor() {
         this.terms = new Terms();
-        this.APIDepServiceAggs = new APIDepServiceAggs();
+        this.ServiceAggs = new ServiceAggs();
     }
 
     getTerms(): Terms {
@@ -22,11 +22,11 @@ export class APIDepService {
         this.terms = terms;
     }
 
-    getAggs(): APIDepServiceAggs {
-        return this.APIDepServiceAggs;
+    getAggs(): ServiceAggs {
+        return this.ServiceAggs;
     }
 
-    setAggs(APIDepServiceAggs: APIDepServiceAggs) {
-        this.APIDepServiceAggs = APIDepServiceAggs;
+    setAggs(ServiceAggs: ServiceAggs) {
+        this.ServiceAggs = ServiceAggs;
     }
 }

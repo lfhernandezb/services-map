@@ -7,7 +7,7 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
-export interface BEHostResponse {
+export interface Response {
     took:         number;
     timedOut:     boolean;
     shards:       Shards;

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Request, Response } from "express";
-import { apiDep, backEndApi, backEndHost, dbDep, frontEndHost, welcome } from "../controllers/home.controller";
+import { apiDep, backEndApi, backEndHost, dbDep, frontEndHost, populateServicesMapDB, welcome } from "../controllers/home.controller";
 
 class HomeRoutes {
   router = Router();
@@ -16,6 +16,7 @@ class HomeRoutes {
     this.router.get("/beapi", backEndApi);
     this.router.get("/apidep", apiDep);
     this.router.get("/dbdep", dbDep);
+    this.router.get("/doall", populateServicesMapDB);
   }
 }
 

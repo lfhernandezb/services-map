@@ -2,7 +2,7 @@ import { JsonObject, JsonProperty } from "typescript-json-serializer";
 import { Bool } from "./bool";
 
 @JsonObject()
-export class APIDepQuery {
+export class Query {
     @JsonProperty()
     private bool: Bool;
 

@@ -1,20 +1,20 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
-import { APIDepService } from "./service";
+import { Service } from "./service";
 
 @JsonObject()
-export class APIDepRequestAggs {
+export class RequestAggs {
     @JsonProperty("service")
-    private service: APIDepService;
+    private service: Service;
 
     constructor() {
-        this.service = new APIDepService();
+        this.service = new Service();
     }
 
-    getService(): APIDepService {
+    getService(): Service {
         return this.service;
     }
 
-    setService(service: APIDepService) {
+    setService(service: Service) {
         this.service = service;
     }
 }

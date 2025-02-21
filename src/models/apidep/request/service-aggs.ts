@@ -2,7 +2,7 @@ import { JsonObject, JsonProperty } from "typescript-json-serializer";
 import { Endpoint } from "./endpoint";
 
 @JsonObject()
-export class APIDepServiceAggs {
+export class ServiceAggs {
     // Define properties
     @JsonProperty()
     private endpoint: Endpoint;
