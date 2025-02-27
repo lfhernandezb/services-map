@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes, Optional } from 'sequelize';
+import { Sequelize, Model, DataTypes, Optional, QueryTypes } from 'sequelize';
 import { BackendService } from './backend-service.model';
 import { sequelize } from '../../libs/sequelize';
 
@@ -72,4 +72,15 @@ API.init(
 BackendService.hasMany(API, { foreignKey: 'backendServiceId' });
 API.belongsTo(BackendService, { foreignKey: 'backendServiceId' });
 
-export { API, APIAttributes };
+// Get backend_id from path
+async function findBackendIdByPath(method: string, path: string) {
+  return sequelize.query(
+    "SELECT DISTINCT backend_service_id FROM API WHERE path LIKE :path AND method = :method ",
+    {
+      replacements: { method: method, path: path + "%" },
+      type: QueryTypes.SELECT
+    }
+  );
+}
+
+export { API, APIAttributes, findBackendIdByPath };

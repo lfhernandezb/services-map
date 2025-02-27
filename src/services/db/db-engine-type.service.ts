@@ -3,9 +3,9 @@ import { DBEngineType, DBEngineTypeAttributes } from "../../db/models/db-engine-
 
 // Create a new DBEngineType entry
 async function createDBEngineType(description: string) {
-  const engineType = await DBEngineType.create({ description });
-  console.log('DBEngineType Created:', engineType.toJSON());
-  return engineType;
+  return DBEngineType.create({ description });
+  //console.log('DBEngineType Created:', engineType.toJSON());
+  //return engineType;
 }
 
 // Get all DBEngineTypes
@@ -16,7 +16,8 @@ async function getDBEngineTypes() {
 
 // Get DBEngineType by ID
 async function getDBEngineTypeById(id: number) {
-  const engineType = await DBEngineType.findByPk(id);
+  return DBEngineType.findByPk(id);
+  /*
   if (engineType) {
     console.log('DBEngineType:', engineType.toJSON());
   } else {
@@ -24,15 +25,17 @@ async function getDBEngineTypeById(id: number) {
   }
 
   return engineType;
+  */
 }
 
 // Get DBEngineType by description
 async function getDBEngineTypeByDescription(description: string) {
-  const engineType = await DBEngineType.findOne({
+  return DBEngineType.findOne({
     where: {
       "description": description
     },
   });
+  /*
   if (engineType) {
     console.log('DBEngineType:', engineType.toJSON());
   } else {
@@ -40,6 +43,7 @@ async function getDBEngineTypeByDescription(description: string) {
   }
 
   return engineType;
+  */
 }
 
 // Update DBEngineType

@@ -3,9 +3,9 @@ import { BackendServiceHost, BackendServiceHostAttributes } from "../../db/model
 
 // Create a new BackendServiceHost entry
 async function createBackendServiceHost(hostId: number, backendServiceId: number) {
-  const entry = await BackendServiceHost.create({ hostId, backendServiceId });
-  console.log('BackendServiceHost Created:', entry.toJSON());
-  return entry;
+  return BackendServiceHost.create({ hostId, backendServiceId });
+  //console.log('BackendServiceHost Created:', entry.toJSON());
+  //return entry;
 }
 
 // Get all BackendServiceHost entries
@@ -16,22 +16,25 @@ async function getBackendServiceHosts() {
 
 // Get BackendServiceHost by ID
 async function getBackendServiceHostById(id: number) {
-  const entry = await BackendServiceHost.findByPk(id);
+  return BackendServiceHost.findByPk(id);
+  /*
   if (entry) {
     console.log('BackendServiceHost:', entry.toJSON());
   } else {
     console.log('BackendServiceHost not found');
   }
+  */
 }
 
 // Get BackendServiceHost by ID
 async function getBackendServiceHostByFks(hostId: number, backendServiceId: number) {
-  const entry = await BackendServiceHost.findOne({
+  return BackendServiceHost.findOne({
     where: {
       "hostId": hostId,
       "backendServiceId": backendServiceId
     },
-  });;
+  });
+  /*
   if (entry) {
     console.log('BackendServiceHost:', entry.toJSON());
   } else {
@@ -39,6 +42,7 @@ async function getBackendServiceHostByFks(hostId: number, backendServiceId: numb
   }
 
   return entry;
+  */
 }
 
 // Update BackendServiceHost

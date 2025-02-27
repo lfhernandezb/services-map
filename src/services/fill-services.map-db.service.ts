@@ -8,19 +8,21 @@ import { BackendServiceHost } from "./elasticsearch/backend-service-host.service
 import { BackendService } from "../db/models/backend-service.model";
 import { Response as BEResponse } from "../models/behost/response/response";
 import { createFrontendServiceHost, getFrontendServiceHostByFks } from "./db/frontend-service-host.service";
-import { createBackendService, getBackendServiceByName } from "./db/backend-service.service";
+import { createBackendService, getBackendServiceById, getBackendServiceByName } from "./db/backend-service.service";
 import { FrontendServiceHost } from "./elasticsearch/frontend-service-host.service";
 import { BackendApi } from "./elasticsearch/backend-api.service";
 import { Response as BEApiResponse } from "../models/beapi/response/response";
 import { Response as DBDepResponse } from "../models/dbdep/response/response";
 import { Response as ApiDepResponse } from "../models/apidep/response/response";
 import { API } from "../db/models/api.model";
-import { createAPI, getAPIByFields, getAPIsByPath } from "./db/api.service";
+import { createAPI, getAPIByFields, getAPIsByPath, getBackendIdByPath } from "./db/api.service";
 import { DBDependency } from "./elasticsearch/db-dependency.service";
 import { createDBEngineType, getDBEngineTypeByDescription } from "./db/db-engine-type.service";
 import { createDBEngine, getDBEngineByFields, getDBEngineById } from "./db/db-engine.service";
 import { createDBSchema, getDBSchemaByFields } from "./db/db-schema.service";
 import { ApiDependency } from "./elasticsearch/api-dependency.service";
+import { APIConsumption } from "../db/models/api-consumption.model";
+import { createAPIConsumption, getAPIConsumptionByFields } from "./db/api-consumption.service";
 
 async function fillServicesMapDB() {
 
@@ -33,7 +35,7 @@ async function fillServicesMapDB() {
     // console.log(data);
 
     if (response.aggregations && response.aggregations.service) {
-      response.aggregations.service.buckets.forEach(async (service: any) => {
+      for (const service of response.aggregations.service.buckets) {
         console.log(service.key);
         // console.log(service.doc_count);
         let feservice: FrontendService | null = await getFrontendServiceByName(service.key);
@@ -42,7 +44,7 @@ async function fillServicesMapDB() {
           feservice = await createFrontendService(service.key);
         }
 
-        service.host.buckets.forEach(async (host: any) => {
+        for(const host of service.host.buckets) {
           console.log("  " + host.key);
           // console.log(host.doc_count);
           let host1: Host | null = await getHostByName(host.key);
@@ -57,14 +59,14 @@ async function fillServicesMapDB() {
             feserviceHost = await createFrontendServiceHost(host1.id, feservice.id);
           }
 
-        });
-      });
+        };
+      };
     } else {
       console.error("Unexpected response structure:", response);
     }
   } catch (error: any) {
     console.error("Error:", error.message);
-    throw new Error(error.message);
+    // throw new Error(error.message);
   }
 
   // servicios backend
@@ -75,7 +77,7 @@ async function fillServicesMapDB() {
     // console.log(data);
 
     if (response.aggregations && response.aggregations.service) {
-      response.aggregations.service.buckets.forEach(async (service: any) => {
+      for (const service of response.aggregations.service.buckets) {
         console.log(service.key);
         // console.log(service.doc_count);
         let beservice: BackendService | null = await getBackendServiceByName(service.key);
@@ -84,7 +86,7 @@ async function fillServicesMapDB() {
           beservice = await createBackendService(service.key);
         }
 
-        service.host.buckets.forEach(async (host: any) => {
+        for (const host of service.host.buckets) {
           console.log("  " + host.key);
           // console.log(host.doc_count);
           let host1: Host | null = await getHostByName(host.key);
@@ -99,14 +101,14 @@ async function fillServicesMapDB() {
             beserviceHost = await createBackendServiceHost(host1.id, beservice.id);
           }
 
-        });
-      });
+        };
+      };
     } else {
       console.error("Unexpected response structure:", response);
     }
   } catch (error: any) {
     console.error("Error:", error.message);
-    throw new Error(error.message);
+    // throw new Error(error.message);
   }
 
   // apis publicadas por los backends
@@ -117,7 +119,7 @@ async function fillServicesMapDB() {
     // console.log(data);
 
     if (response.aggregations && response.aggregations.service) {
-      response.aggregations.service.buckets.forEach(async (service: any) => {
+      for (const service of response.aggregations.service.buckets) {
         console.log(service.key);
         // console.log(service.doc_count);
         let beservice: BackendService | null = await getBackendServiceByName(service.key);
@@ -126,29 +128,29 @@ async function fillServicesMapDB() {
           beservice = await createBackendService(service.key);
         }
 
-        service.method.buckets.forEach(async (method: any) => {
+        for (const method of service.method.buckets) {
           console.log("  " + method.key);
 
           console.log(method);
 
-          method.path.buckets.forEach(async (path: any) => {
+          for (const path of method.path.buckets) {
             console.log("    " + path.key)
 
             let api = await getAPIByFields(method.key, path.key, beservice.id);
 
             if (!api) {
-              api = await createAPI("x", method.key, path.key, beservice.id);
+              api = await createAPI("x", method.key as 'GET' | 'POST' | 'PUT' | 'DELETE', path.key, beservice.id);
             }
-          });
+          };
 
-        });
-      });
+        };
+      };
     } else {
       console.error("Unexpected response structure:", response);
     }
   } catch (error: any) {
     console.error("Error:", error.message);
-    throw new Error(error.message);
+    // throw new Error(error.message);
   }
 
   // dependencias backend - base de datos
@@ -159,7 +161,7 @@ async function fillServicesMapDB() {
     // console.log(data);
 
     if (response.aggregations && response.aggregations.service) {
-      response.aggregations.service.buckets.forEach(async (service: any) => {
+      for (const service of response.aggregations.service.buckets) {
         console.log(service.key);
         // console.log(service.doc_count);
         let beservice: BackendService | null = await getBackendServiceByName(service.key);
@@ -168,7 +170,7 @@ async function fillServicesMapDB() {
           beservice = await createBackendService(service.key);
         }
 
-        service.engine_type.buckets.forEach(async (engineType: any) => {
+        for (const engineType of service.engine_type.buckets) {
           console.log("  " + engineType.key);
 
           let dbEngineType = await getDBEngineTypeByDescription(engineType.key);
@@ -179,7 +181,7 @@ async function fillServicesMapDB() {
 
           // console.log(engineType);
 
-          engineType.host.buckets.forEach(async (host: any) => {
+          for (const host of engineType.host.buckets) {
             console.log("    " + host.key);
 
             let host1: Host | null = await getHostByName(host.key);
@@ -194,7 +196,7 @@ async function fillServicesMapDB() {
               dbEngine = await createDBEngine("x", host1.id, dbEngineType.id);
             }
 
-            host.instance.buckets.forEach(async (instance: any) => {
+            for (const instance of host.instance.buckets) {
               console.log("      " + instance.key);
 
               let dbSchema = await getDBSchemaByFields(instance.key, dbEngine.id);
@@ -203,18 +205,18 @@ async function fillServicesMapDB() {
                 dbSchema = await createDBSchema(instance.key, dbEngine.id);
               }
 
-            });
+            };
 
-          });
+          };
 
-        });
-      });
+        };
+      };
     } else {
       console.error("Unexpected response structure:", response);
     }
   } catch (error: any) {
     console.error("Error:", error.message);
-    throw new Error(error.message);
+    // throw new Error(error.message);
   }
 
   // consumo de APIs - dependencias
@@ -225,17 +227,19 @@ async function fillServicesMapDB() {
     // console.log(data);
 
     if (response.aggregations && response.aggregations.service) {
-      response.aggregations.service.buckets.forEach(async (service: any) => {
+      for (const service of response.aggregations.service.buckets) {
         console.log(service.key);
         // console.log(service.doc_count);
-        /*
-        let beservice: BackendService | null = await getBackendServiceByName(service.key);
 
-        if (!beservice) {
-          beservice = await createBackendService(service.key);
+        // in service.key we have the consumer service name... we look for its code:
+        const frontendService: FrontendService | null = await getFrontendServiceByName(service.key);
+
+        if (!frontendService) {
+          console.log("Service not foud as frontend: " + service.key);
+          continue;
         }
-        */
-        service.endpoint.buckets.forEach(async (call: any) => {
+
+        for (const call of service.endpoint.buckets) {
           console.log("  " + call.key);
 
           // call.key has the form "METHOD URL"
@@ -250,15 +254,41 @@ async function fillServicesMapDB() {
           console.log("  " + url.hostname); // URL hostname
           console.log("  " + url.port); // URL port
           console.log("  " + url.protocol); // URL protocol
+          console.log("  " + url.search); // URL search
+          console.log("  " + url.searchParams); // URL search
+          console.log("  " + url.href); // URL search
+
+          interface BackendApiResponse {
+            backend_service_id: number;
+          }
+
+          const backendApi: BackendApiResponse[] = await getBackendIdByPath(urlParts[0], url.pathname) as BackendApiResponse[];
+
+          console.log(backendApi);
+
+          if (backendApi.length == 1) {
+            console.log("found a match " + backendApi[0]);
+            const backendService = await getBackendServiceById(backendApi[0].backend_service_id);
+            console.log(backendService);
+
+            // insert into APIConsumption if not exists
+            if (backendService) {
+              let apiConsumption = await getAPIConsumptionByFields("frontend", frontendService.id, backendService.id);
+
+              if (!apiConsumption) {
+                apiConsumption = await createAPIConsumption("frontend", frontendService.id, backendService.id);
+              }
+            } else {
+              console.log("Backend service not found for API consumption.");
+            }
+
+          } else if (backendApi.length == 0) {
+            console.log("no match");
+          } else {
+            console.log("found more than one match");
+          }
 
           /*
-          let dbEngineType = await getDBEngineTypeByDescription(engineType.key);
-
-          if (!dbEngineType) {
-            dbEngineType = await createDBEngineType(engineType.key);
-          }
-          */
-
           let apis = await getAPIsByPath(urlParts[0], url.pathname);
 
           if (apis) {
@@ -271,15 +301,15 @@ async function fillServicesMapDB() {
               console.log("no match");
             }
           }
-
-        });
-      });
+          */
+        };
+      };
     } else {
       console.error("Unexpected response structure:", response);
     }
   } catch (error: any) {
-    console.error("Error:", error.message);
-    throw new Error(error.message);
+    console.error("Error:", error);
+    throw new Error(error);
   }
 
 }

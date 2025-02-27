@@ -3,9 +3,9 @@ import { DBEngine, DBEngineAttributes } from "../../db/models/db-engine.model";
 
 // Create a new DBEngine entry
 async function createDBEngine(name: string, hostId: number, dbEngineTypeId: number) {
-  const dbEngine = await DBEngine.create({ name, hostId, dbEngineTypeId });
-  console.log('DBEngine Created:', dbEngine.toJSON());
-  return dbEngine;
+  return DBEngine.create({ name, hostId, dbEngineTypeId });
+  // console.log('DBEngine Created:', dbEngine.toJSON());
+  // return dbEngine;
 }
 
 // Get all DBEngines
@@ -17,7 +17,8 @@ async function getDBEngines() {
 
 // Get DBEngine by ID
 async function getDBEngineById(id: number) {
-  const dbEngine = await DBEngine.findByPk(id);
+  return DBEngine.findByPk(id);
+  /*
   if (dbEngine) {
     console.log('DBEngine:', dbEngine.toJSON());
   } else {
@@ -25,16 +26,18 @@ async function getDBEngineById(id: number) {
   }
 
   return dbEngine;
+  */
 }
 
 // Get DBEngine by hostId, dbEngineTypeId
 async function getDBEngineByFields(hostId: number, dbEngineTypeId: number) {
-  const dbEngine = await DBEngine.findOne({
+  return DBEngine.findOne({
     where: {
       "hostId": hostId,
       "dbEngineTypeId": dbEngineTypeId
     },
   });
+  /*
   if (dbEngine) {
     console.log('DBEngine:', dbEngine.toJSON());
   } else {
@@ -42,6 +45,7 @@ async function getDBEngineByFields(hostId: number, dbEngineTypeId: number) {
   }
 
   return dbEngine;
+  */
 }
 
 // Update DBEngine

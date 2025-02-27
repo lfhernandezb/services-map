@@ -3,9 +3,9 @@ import { DBSchema, DBSchemaAttributes } from "../../db/models/db-schema.model";
 
 // Create a new DBSchema entry
 async function createDBSchema(name: string, dbengineId: number) {
-  const schema = await DBSchema.create({ name, dbengineId });
-  console.log('DBSchema Created:', schema.toJSON());
-  return schema;
+  return DBSchema.create({ name, dbengineId });
+  // console.log('DBSchema Created:', schema.toJSON());
+  // return schema;
 }
 
 // Get all DBSchemas
@@ -17,7 +17,8 @@ async function getDBSchemas() {
 
 // Get DBSchema by ID
 async function getDBSchemaById(id: number) {
-  const schema = await DBSchema.findByPk(id);
+  return DBSchema.findByPk(id);
+  /*
   if (schema) {
     console.log('DBSchema:', schema.toJSON());
   } else {
@@ -25,16 +26,18 @@ async function getDBSchemaById(id: number) {
   }
 
   return schema;
+  */
 }
 
 // Get DBSchema by name, dbengineId
 async function getDBSchemaByFields(name: string, dbengineId: number) {
-  const schema = await DBSchema.findOne({
+  return DBSchema.findOne({
     where: {
       "name": name,
       "dbengineId": dbengineId
     },
   });
+  /*
   if (schema) {
     console.log('DBSchema:', schema.toJSON());
   } else {
@@ -42,6 +45,7 @@ async function getDBSchemaByFields(name: string, dbengineId: number) {
   }
 
   return schema;
+  */
 }
 
 // Update DBSchema

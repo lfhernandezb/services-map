@@ -2,8 +2,8 @@ import { BackendToDBAccess, BackendToDBAccessAttributes } from "../../db/models/
 
 // Create a new BackendToDBAccess entry
 async function createBackendToDBAccess(backendServiceId: number, dbschemaId: number) {
-  const access = await BackendToDBAccess.create({ backendServiceId, dbschemaId });
-  console.log('BackendToDBAccess Created:', access.toJSON());
+  return BackendToDBAccess.create({ backendServiceId, dbschemaId });
+  // console.log('BackendToDBAccess Created:', access.toJSON());
 }
 
 // Get all BackendToDBAccess records
@@ -14,12 +14,14 @@ async function getBackendToDBAccessList() {
 
 // Get BackendToDBAccess by ID
 async function getBackendToDBAccessById(id: number) {
-  const access = await BackendToDBAccess.findByPk(id);
+  return BackendToDBAccess.findByPk(id);
+  /*
   if (access) {
     console.log('BackendToDBAccess:', access.toJSON());
   } else {
     console.log('BackendToDBAccess not found');
   }
+  */
 }
 
 // Update BackendToDBAccess

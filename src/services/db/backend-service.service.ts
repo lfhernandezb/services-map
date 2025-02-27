@@ -4,9 +4,9 @@ import { BackendService, BackendServiceAttributes } from "../../db/models/backen
 
 // Create a new BackendService entry
 async function createBackendService(name: string) {
-  const service = await BackendService.create({ name });
-  console.log('BackendService Created:', service.toJSON());
-  return service;
+  return BackendService.create({ name });
+  //console.log('BackendService Created:', service.toJSON());
+  //return service;
 }
 
 // Get all BackendServices
@@ -17,21 +17,24 @@ async function getBackendServices() {
 
 // Get BackendService by ID
 async function getBackendServiceById(id: number) {
-  const service = await BackendService.findByPk(id);
+  return BackendService.findByPk(id);
+  /*
   if (service) {
     console.log('BackendService:', service.toJSON());
   } else {
     console.log('BackendService not found');
   }
+  */
 }
 
 // Get BackendService by name
 async function getBackendServiceByName(name: string) {
-  const service = await BackendService.findOne({
+  return BackendService.findOne({
     where: {
       name: name,
     },
   });
+  /*
   if (service) {
     console.log('BackendService:', service.toJSON());
   } else {
@@ -39,6 +42,7 @@ async function getBackendServiceByName(name: string) {
   }
 
   return service;
+  */
 }
 
 // Update BackendService

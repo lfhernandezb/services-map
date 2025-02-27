@@ -2,9 +2,10 @@ import { Host, HostAttributes } from "../../db/models/host.model";
 
 // Create a new Host entry
 async function createHost(name: string, ipAddress: string, type: string) {
-  const host = await Host.create({ name, ipAddress, type });
-  console.log('Host Created:', host.toJSON());
-  return host;
+  return Host.create({ name, ipAddress, type });
+  console.log('createFrontendService ' + name + ' ' + ipAddress + ' ' + type)
+  //console.log('Host Created:', host.toJSON());
+  //return host;
 }
 
 // Get all Hosts
@@ -15,21 +16,26 @@ async function getHosts() {
 
 // Get Host by ID
 async function getHostById(id: number) {
-  const host = await Host.findByPk(id);
+  console.log('createFrontendService ' + id)
+  return Host.findByPk(id);
+  /*
   if (host) {
     console.log('Host:', host.toJSON());
   } else {
     console.log('Host not found');
   }
+  */
 }
 
 // Get Host by Name
 async function getHostByName(name: string) {
-  const host = await Host.findOne({
+  console.log('createFrontendService ' + name)
+  return Host.findOne({
     where: {
       name: name,
     },
   });
+  /*
   if (host) {
     console.log('Host:', host.toJSON());
   } else {
@@ -37,6 +43,7 @@ async function getHostByName(name: string) {
   }
 
   return host;
+  */
 }
 
 // Update Host

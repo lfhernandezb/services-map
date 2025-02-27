@@ -28,7 +28,7 @@ export interface DBDepService {
 export interface ServiceBucket {
     key:        string;
     docCount:   number;
-    engineType: EngineType;
+    engine_type: EngineType;
 }
 
 export interface EngineType {

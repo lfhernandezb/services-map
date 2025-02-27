@@ -1,13 +1,14 @@
 import { Sequelize, Model, DataTypes, Optional } from 'sequelize';
 import { API } from './api.model';
 import { sequelize } from '../../libs/sequelize';
+import { BackendService } from './backend-service.model';
 
 // Define attributes for APIConsumption
 interface APIConsumptionAttributes {
   id: number;
-  apiId: number;
   consumerType: 'frontend' | 'backend';
   consumerId: number;
+  backendServiceId: number;
   createdAt: Date;
 }
 
@@ -17,9 +18,9 @@ interface APIConsumptionCreationAttributes extends Optional<APIConsumptionAttrib
 // Define APIConsumption model
 class APIConsumption extends Model<APIConsumptionAttributes, APIConsumptionCreationAttributes> {
   public id!: number;
-  public apiId!: number;
   public consumerType!: 'frontend' | 'backend';
   public consumerId!: number;
+  public backendServiceId!: number;
   public createdAt!: Date;
 }
 
@@ -31,21 +32,20 @@ APIConsumption.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    apiId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: API,
-        key: 'id',
-      },
-    },
     consumerType: {
       type: DataTypes.ENUM('frontend', 'backend'),
       allowNull: false,
+      field: 'consumer_type',
     },
     consumerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'consumer_id',
+    },
+    backendServiceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: 'backend_service_id'
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -62,7 +62,7 @@ APIConsumption.init(
 );
 
 // Define associations
-API.hasMany(APIConsumption, { foreignKey: 'apiId' });
-APIConsumption.belongsTo(API, { foreignKey: 'apiId' });
+BackendService.hasMany(APIConsumption, { foreignKey: 'backendServiceId' });
+APIConsumption.belongsTo(BackendService, { foreignKey: 'backendServiceId' });
 
 export { APIConsumption, APIConsumptionAttributes };

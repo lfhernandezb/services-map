@@ -3,9 +3,10 @@ import { FrontendServiceHost, FrontendServiceHostAttributes } from "../../db/mod
 
 // Create a new FrontendServiceHost entry
 async function createFrontendServiceHost(hostId: number, frontendServiceId: number) {
-  const entry = await FrontendServiceHost.create({ hostId, frontendServiceId });
-  console.log('FrontendServiceHost Created:', entry.toJSON());
-  return entry;
+  console.log('createFrontendServiceHost ' + hostId + ' ' + frontendServiceId)
+  return FrontendServiceHost.create({ hostId, frontendServiceId });
+  //console.log('FrontendServiceHost Created:', entry.toJSON());
+  // return entry;
 }
 
 // Get all FrontendServiceHost entries
@@ -16,22 +17,26 @@ async function getFrontendServiceHosts() {
 
 // Get FrontendServiceHost by ID
 async function getFrontendServiceHostById(id: number) {
-  const entry = await FrontendServiceHost.findByPk(id);
+  return FrontendServiceHost.findByPk(id);
+  /*
   if (entry) {
     console.log('FrontendServiceHost:', entry.toJSON());
   } else {
     console.log('FrontendServiceHost not found');
   }
+  */
 }
 
 // Get FrontendServiceHost by hostId and frontendId
 async function getFrontendServiceHostByFks(hostId: number, frontendServiceId: number) {
-  const entry = await FrontendServiceHost.findOne({
+  console.log('createFrontendServiceHost ' + hostId + ' ' + frontendServiceId)
+  return FrontendServiceHost.findOne({
     where: {
       "hostId": hostId,
       "frontendServiceId": frontendServiceId
     },
   });
+  /*
   if (entry) {
     console.log('FrontendServiceHost:', entry.toJSON());
   } else {
@@ -39,6 +44,7 @@ async function getFrontendServiceHostByFks(hostId: number, frontendServiceId: nu
   }
 
   return entry;
+  */
 }
 
 // Update FrontendServiceHost

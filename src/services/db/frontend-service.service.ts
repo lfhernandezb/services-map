@@ -4,9 +4,10 @@ import { FrontendService, FrontendServiceAttributes } from "../../db/models/fron
 
 // Create a new FrontendService entry
 async function createFrontendService(name: string) {
-  const service = await FrontendService.create({ name });
-  console.log('FrontendService Created:', service.toJSON());
-  return service;
+  console.log('createFrontendService ' + name)
+  return FrontendService.create({ name });
+  // console.log('FrontendService Created:', service.toJSON());
+  // return service;
 }
 
 // Get all FrontendServices
@@ -17,21 +18,26 @@ async function getFrontendServices() {
 
 // Get FrontendService by ID
 async function getFrontendServiceById(id: number) {
-  const service = await FrontendService.findByPk(id);
+  console.log('createFrontendService ' + id)
+  return FrontendService.findByPk(id);
+  /*
   if (service) {
     console.log('FrontendService:', service.toJSON());
   } else {
     console.log('FrontendService not found');
   }
+  */
 }
 
 // Get FrontendService by name
 async function getFrontendServiceByName(name: string) {
-  const service = await FrontendService.findOne({
+  console.log('getFrontendServiceByName ' + name)
+  return FrontendService.findOne({
     where: {
       name: name,
     },
   });
+  /*
   if (service) {
     console.log('FrontendService:', service.toJSON());
   } else {
@@ -39,6 +45,7 @@ async function getFrontendServiceByName(name: string) {
   }
 
   return service;
+  */
 }
 
 // Update FrontendService

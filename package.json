@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "node ./build/server.js",
-    "start": "tsc && npm run dev"
+    "start": "DEBUG=sequelize:* && tsc && npm run dev"
   },
   "keywords": [
     "nodejs",
