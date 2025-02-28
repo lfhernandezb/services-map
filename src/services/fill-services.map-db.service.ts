@@ -40,8 +40,11 @@ async function fillServicesMapDB() {
         // console.log(service.doc_count);
         let feservice: FrontendService | null = await getFrontendServiceByName(service.key);
 
-        if (!feservice) {
+        // puede aparecer un servicio backend que llama a otro backend; estos vienen sin hosts
+        if (!feservice && service.host.buckets.length > 0) {
           feservice = await createFrontendService(service.key);
+        } else {
+          continue;
         }
 
         for(const host of service.host.buckets) {
@@ -231,77 +234,85 @@ async function fillServicesMapDB() {
         console.log(service.key);
         // console.log(service.doc_count);
 
-        // in service.key we have the consumer service name... we look for its code:
+        let consumerServiceId: number = 0;
+        let consumerType: string = "";
+
+        // in service.key we have the consumer service name... it could be frontend or backend... we look for its code:
         const frontendService: FrontendService | null = await getFrontendServiceByName(service.key);
 
         if (!frontendService) {
           console.log("Service not foud as frontend: " + service.key);
-          continue;
+
+          // backend?
+          const backendService: BackendService | null = await getBackendServiceByName(service.key);
+
+          if (!backendService) {
+            console.log("Service not foud as backend: " + service.key);
+
+            continue;
+          } else {
+            consumerServiceId = backendService.id;
+            consumerType = "backend";
+          }
+        } else {
+          consumerServiceId = frontendService.id;
+          consumerType = "frontend";
         }
 
-        for (const call of service.endpoint.buckets) {
-          console.log("  " + call.key);
+        for (const method of service.method.buckets) {
+          console.log("  " + method.key);
 
-          // call.key has the form "METHOD URL"
-          // parsing the URL
-          const urlParts = call.key.split(" ");
-          console.log(" -" + urlParts[0]); // METHOD
-          // console.log(urlParts[1]); // URL
+          for (const call of method.endpoint.buckets) {
 
-          const url: URL = new URL(urlParts[1]);
 
-          console.log("  " + url.pathname); // URL path
-          console.log("  " + url.hostname); // URL hostname
-          console.log("  " + url.port); // URL port
-          console.log("  " + url.protocol); // URL protocol
-          console.log("  " + url.search); // URL search
-          console.log("  " + url.searchParams); // URL search
-          console.log("  " + url.href); // URL search
 
-          interface BackendApiResponse {
-            backend_service_id: number;
-          }
+            // call.key has the form "URL"
+            // parsing the URL
+            // const urlParts = call.key.split(" ");
+            // console.log(" -" + urlParts[0]); // METHOD
+            // console.log(urlParts[1]); // URL
 
-          const backendApi: BackendApiResponse[] = await getBackendIdByPath(urlParts[0], url.pathname) as BackendApiResponse[];
+            const url: URL = new URL(call.key);
 
-          console.log(backendApi);
+            console.log("  " + url.pathname); // URL path
+            console.log("  " + url.hostname); // URL hostname
+            console.log("  " + url.port); // URL port
+            console.log("  " + url.protocol); // URL protocol
+            console.log("  " + url.search); // URL search
+            console.log("  " + url.searchParams); // URL search
+            console.log("  " + url.href); // URL search
 
-          if (backendApi.length == 1) {
-            console.log("found a match " + backendApi[0]);
-            const backendService = await getBackendServiceById(backendApi[0].backend_service_id);
-            console.log(backendService);
+            interface BackendApiResponse {
+              backend_service_id: number;
+            }
 
-            // insert into APIConsumption if not exists
-            if (backendService) {
-              let apiConsumption = await getAPIConsumptionByFields("frontend", frontendService.id, backendService.id);
+            const backendApi: BackendApiResponse[] = await getBackendIdByPath(method.key, url.pathname) as BackendApiResponse[];
 
-              if (!apiConsumption) {
-                apiConsumption = await createAPIConsumption("frontend", frontendService.id, backendService.id);
+            console.log(backendApi);
+
+            if (backendApi.length == 1) {
+              console.log("found a match " + backendApi[0]);
+              const backendService = await getBackendServiceById(backendApi[0].backend_service_id);
+              console.log(backendService);
+
+              // insert into APIConsumption if not exists
+              if (backendService) {
+                let apiConsumption = await getAPIConsumptionByFields(consumerType as 'frontend' | 'backend', consumerServiceId, backendService.id);
+
+                if (!apiConsumption) {
+                  apiConsumption = await createAPIConsumption(consumerType as 'frontend' | 'backend', consumerServiceId, backendService.id);
+                }
+              } else {
+                console.log("Backend service not found for API consumption.");
               }
-            } else {
-              console.log("Backend service not found for API consumption.");
-            }
 
-          } else if (backendApi.length == 0) {
-            console.log("no match");
-          } else {
-            console.log("found more than one match");
-          }
-
-          /*
-          let apis = await getAPIsByPath(urlParts[0], url.pathname);
-
-          if (apis) {
-            if (apis.length == 1) {
-              console.log("found a match");
-              console.log(apis.at(0))
-            } else if (apis.length > 1) {
-              console.log("found more than one match");
-            } else if (apis.length == 0) {
+            } else if (backendApi.length == 0) {
               console.log("no match");
+            } else {
+              console.log("found more than one match");
             }
+
           }
-          */
         };
       };
     } else {

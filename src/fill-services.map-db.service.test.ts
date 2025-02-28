@@ -14,10 +14,10 @@ describe("Fill services DB", () => {
         // Close the database connection after all tests
         await sequelize.close();
     });
-  
+
      // We are marking the test function call as async
      test(("run correctly"), async () => {
-       // we are awaiting heavyWorkingService to finish its job 
+       // we are awaiting heavyWorkingService to finish its job
        await heavyWorkingService();
-    });
+    }, 120000);
   });

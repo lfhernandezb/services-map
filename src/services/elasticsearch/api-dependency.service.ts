@@ -11,25 +11,37 @@ import { Should } from "../../models/apidep/request/should";
 import { Term } from "../../models/term";
 import { Terms } from "../../models/terms";
 import { Response } from "../../models/apidep/response/response";
+import { MethodAggs } from "../../models/apidep/request/method-aggs";
+import { Method } from "../../models/apidep/request/method";
 
 async function ApiDependency(): Promise<Response> {
   const API_KEY: string = "aS1BYzlaUUJsSVBwZ3B0OE9nTnc6WnA5eGRtckpUVGFsNzBWaVF6UVZJZw==";
 
   // create a new Terms object
   const terms1: Terms = new Terms();
-  terms1.setField("span.name");
+  terms1.setField("url.original");
 
   const endpoint: Endpoint = new Endpoint();
   endpoint.setTerms(terms1);
 
-  const serviceAggs: ServiceAggs = new ServiceAggs();
-  serviceAggs.setEndpoint(endpoint);
+  const methodAggs: MethodAggs = new MethodAggs();
+  methodAggs.setEndpoint(endpoint);
 
   const terms2: Terms = new Terms();
-  terms2.setField("service.name");
+  terms2.setField("http.request.method");
+
+  const method: Method = new Method();
+  method.setTerms(terms2);
+  method.setAggs(methodAggs);
+
+  const serviceAggs: ServiceAggs = new ServiceAggs();
+  serviceAggs.setMethod(method);
+
+  const terms3: Terms = new Terms();
+  terms3.setField("service.name");
 
   const service: Service = new Service();
-  service.setTerms(terms2);
+  service.setTerms(terms3);
   service.setAggs(serviceAggs);
 
   const requestAggs: RequestAggs = new RequestAggs();

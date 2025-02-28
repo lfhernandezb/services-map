@@ -1,24 +1,24 @@
 import { JsonObject, JsonProperty } from "typescript-json-serializer";
-import { Endpoint } from "./endpoint";
+import { Method } from "./method";
 
 @JsonObject()
 export class ServiceAggs {
     // Define properties
     @JsonProperty()
-    private endpoint: Endpoint;
+    private method: Method;
 
     // Constructor to initialize properties
     constructor() {
-        this.endpoint = new Endpoint();
+        this.method = new Method();
     }
 
-    // Getter for endpoint
-    public getEndpoint(): Endpoint {
-        return this.endpoint;
+    // Getter for method
+    public getMethod(): Method {
+        return this.method;
     }
 
-    // Setter for endpoint
-    public setEndpoint(endpoint: Endpoint): void {
-        this.endpoint = endpoint;
+    // Setter for method
+    public setMethod(method: Method): void {
+        this.method = method;
     }
 }
